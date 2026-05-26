@@ -4,104 +4,82 @@ const ai = new GoogleGenAI({
    apiKey: process.env.GEMINI_API_KEY
 });
 
-const generateCodeExplanation = async (code) => {
-   // const prompt = `You are a beginner-friendly programming tutor(But don't start the conversation by introducing yourself).
+const generateCodeExplanation = async (code, language) => {
 
-   // Explain the following code clearly and step-by-step.
-
-   // Structure the response using markdown.
-
-   // Include:
-   // - Summary
-   // - Step-by-step explanation
-   // - Important variables
-   // - Functions used
-   // - Beginner notes
-
-   // Code:
-
-   // ${code}`
-   //    const prompt = `
-
-   // You are a beginner-friendly programming tutor.
-
-   // Analyze the following code, Explain the code clearly and step-by-step and respond ONLY in valid JSON format.
-
-   // The JSON must contain:
-
-   // {
-   //   "explanation": "markdown explanation here",
-   //   "diagram": "valid mermaid flowchart syntax here"
-   // }
-
-   // Rules:
-   // - Summary
-   // - Step-by-step explanation
-   // - Important variables
-   // - Functions used
-   // - Beginner notes
-   // - explanation must be markdown
-   // - diagram must use Mermaid flowchart syntax
-   // - keep explanations beginner friendly
-   // - diagram should visualize execution flow clearly
-   // - do not include extra text outside JSON
-
-   // Code:
-
-   // ${code}
-
-   // `
    const prompt = `
 
-You are a beginner-friendly programming tutor.
+      You are a beginner-friendly programming tutor.
 
-Analyze the following code and respond ONLY in valid JSON.
+      Analyze the following code and respond ONLY in valid JSON.
 
-Response format:
+      Response format:
 
-{
-  "explanation": "markdown explanation",
-  "steps": [
-    {
-      "step": 1,
-      "title": "short step title",
-      "description": "beginner friendly explanation",
-      "array": [example array state],
-      "highlights": [indices being focused]
-    }
-  ]
-}
+      {
+      "explanation": "markdown explanation",
+      "steps": [
+         {
+            "step": 1,
+            "title": "short step title",
+            "description": "beginner friendly explanation",
+            "array": [example array state],
+            "highlights": [indices being focused]
+         }
+      ]
+      }
 
-Rules:
-- Output ONLY valid JSON
-- explanation must use markdown
-- steps must explain execution sequentially
-- array should represent current state
-- highlights should indicate active indices
-- keep explanations beginner friendly
-- Return "Not a valid program" if the code is not an actual code or just jibberish
+      Rules:
+      - Output ONLY valid JSON
+      - explanation must use markdown
+      - steps must explain execution sequentially
+      - array should represent current state
+      - highlights should indicate active indices
+      - keep explanations beginner friendly
+      - Return "Not a valid program" if the code is not an actual code or just jibberish
+      - Always generate valid parsable JSON
+      - Do not wrap JSON in markdown
+      - Ensure all arrays use proper JSON syntax
 
-Code:
+      Code:
 
-${code}
+      ${code}
 
-`
+      Programming language:
 
+      ${language}
+
+      `
    const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: prompt
    })
 
    const rawText = response.text
+   try {
+      const cleanedText = rawText
+         .replace(/```json/g, "")
+         .replace(/```/g, "")
+         .trim()
 
-   const cleanedText = rawText
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim()
+      const parsedData = JSON.parse(cleanedText)
 
-   const parsedData = JSON.parse(cleanedText)
+      return {
+         explanation: parsedData.explanation || "No explanation generated",
+         steps: parsedData.steps || []
+      }
+   } catch (err) {
+      console.log("AI parsing error")
 
-   return parsedData
+      return {
+         explanation: `
+            # Error
+
+            The AI returned an invalid response format.
+
+            Please try again.
+         `,
+         steps: [],
+      }
+   }
 }
 
 module.exports = {

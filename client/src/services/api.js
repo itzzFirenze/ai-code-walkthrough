@@ -1,4 +1,4 @@
-const explainCode = async (code) => {
+const explainCode = async (code, language) => {
    try {
       const response = await fetch(
          'http://localhost:5000/api/explain',
@@ -7,7 +7,7 @@ const explainCode = async (code) => {
             headers: {
                "Content-Type": "application/json"
             },
-            body: JSON.stringify({ code })
+            body: JSON.stringify({ code, language })
          }
       )
 
