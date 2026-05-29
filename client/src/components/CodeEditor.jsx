@@ -1,6 +1,8 @@
 import Editor from '@monaco-editor/react';
+import { useWalkthrough } from '../context/WalkthroughContext';
 
-const CodeEditor = ({ code, setCode, language }) => {
+const CodeEditor = () => {
+   const { code, setCode, language } = useWalkthrough()
    return (
       <div className='border border-zinc-700 rounded-xl overflow-hidden'>
          <Editor

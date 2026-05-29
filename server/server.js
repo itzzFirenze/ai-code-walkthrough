@@ -1,17 +1,22 @@
-const express = require('express')
-const cors = require('cors')
-require('dotenv').config()
+import express from 'express'
+import cors from 'cors'
+import 'dotenv/config'
+import connectDB from './config/db.js'
 
-const testRoutes = require('./routes/testRoutes')
-const explainRoutes = require('./routes/explainRoutes')
+import explainRoutes from './routes/explainRoutes.js'
+import authRoutes from './routes/authRoutes.js' 
+import walkthroughRoutes from './routes/walkthroughRoutes.js'
 
 const app = express()
+
+connectDB()
 
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/test', testRoutes)
+app.use('/api/auth', authRoutes)
 app.use('/api/explain', explainRoutes)
+app.use('/api/walkthroughs', walkthroughRoutes)
 
 app.get('/', (req, res) => {
    res.json({ message: "Backend is running" })

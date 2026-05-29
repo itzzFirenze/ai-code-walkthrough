@@ -1,7 +1,7 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const { explainCode } = require('../controllers/explainController')
+import { explainCode } from '../controllers/explainController.js'
 
 router.post('/', explainCode)
 
-module.exports = router
+export default router

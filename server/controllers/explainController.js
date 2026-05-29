@@ -1,11 +1,11 @@
-const { generateCodeExplanation } = require('../services/aiService')
+import { generateCodeExplanation } from '../services/aiService.js';
 
 const explainCode = async (req, res) => {
    try {
       const { code, language } = req.body;
 
       if (!code) {
-         return res.statsu(400).json({ message: "Code is required!" })
+         return res.status(400).json({ message: "Code is required!" })
       }
 
       const result = await generateCodeExplanation(code, language)
@@ -17,10 +17,14 @@ const explainCode = async (req, res) => {
          steps: result.steps
       })
    } catch (error) {
-
+      console.error("Controller Error:", error);
+      return res.status(500).json({
+         success: false,
+         message: error.message || "Internal server error occurred during AI processing"
+      });
    }
 }
 
-module.exports = {
+export {
    explainCode
 }

@@ -1,10 +1,13 @@
 import Markdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { useWalkthrough } from '../context/WalkthroughContext';
 
-const ExplanationBox = ({ explanation }) => {
+const ExplanationBox = () => {
+   const { explanation } = useWalkthrough()
+
    return (
-      <div className="mt-8 bg-zinc-800 border border-zinc-700 rounded-xl p-6 overflow-hidden">
+      <div className="mt-2 bg-zinc-800 border border-zinc-700 rounded-xl p-2 overflow-hidden">
          <Markdown
             components={{
                code(props) {
@@ -19,7 +22,7 @@ const ExplanationBox = ({ explanation }) => {
                         style={dark}
                         customStyle={{
                            background: 'transparent',
-                           backgroundColor: '#27272a', // zinc-800
+                           backgroundColor: '#27272a',
                            margin: '0',
                            borderRadius: '0.5rem',
                            overflowX: 'auto',
