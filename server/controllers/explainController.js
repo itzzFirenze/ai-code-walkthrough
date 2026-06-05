@@ -13,8 +13,7 @@ const explainCode = async (req, res) => {
       return res.status(200).json({
          success: true,
          message: "Explanation generated",
-         explanation: result.explanation,
-         steps: result.steps
+         ...result
       })
    } catch (error) {
       console.error("Controller Error:", error);

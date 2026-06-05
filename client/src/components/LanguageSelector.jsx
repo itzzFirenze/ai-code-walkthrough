@@ -1,25 +1,24 @@
-import { languages } from "../constants/languages"
-import { useWalkthrough } from "../context/WalkthroughContext"
+import { useWalkthrough } from '../context/WalkthroughContext'
+import { languages } from '../constants/languages'
 
 const LanguageSelector = () => {
    const { language, setLanguage } = useWalkthrough()
 
    return (
-      <div className='mb-4'>
-         <label className='block mb-2 text-zinc-300 font-medium'>
-            Programming Language
-         </label>
-         <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className='bg-zinc-800 border border-zinc-700 rounded-lg px-12 py-3 outline-none text-white'
-         >
-            {languages.map((lang) => (
-               <option value={lang.value} key={lang.value}>
-                  {lang.label}
-               </option>
-            ))}
-         </select>
+      <div className='flex items-center gap-2 flex-wrap'>
+         <span className='text-xs font-mono text-[#555] uppercase tracking-widest mr-1'>lang</span>
+         {languages.map(({ label, value }) => (
+            <button
+               key={value}
+               onClick={() => setLanguage(value)}
+               className={`px-3 py-1 text-xs font-mono rounded border transition-colors ${language === value
+                     ? 'bg-[#e8e8e8] text-[#0e0e0e] border-[#e8e8e8]'
+                     : 'bg-transparent text-[#888] border-[#2a2a2a] hover:border-[#444] hover:text-[#ccc]'
+                  }`}
+            >
+               {label}
+            </button>
+         ))}
       </div>
    )
 }

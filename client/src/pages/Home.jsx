@@ -1,43 +1,34 @@
 import ExplanationBox from '../components/ExplanationBox'
-import ExecutionSteps from '../components/ExecutionSteps'
 import CodeEditor from '../components/CodeEditor'
 import Header from '../components/Header'
 import LanguageSelector from '../components/LanguageSelector'
 import ErrorMessage from '../components/ErrorMessage'
 import GenerateButton from '../components/GenerateButton'
 import { useWalkthrough } from '../context/WalkthroughContext'
+import Layout from '../components/Layout'
+import TraceViewer from '../components/TraceViewer'
+import VariableTable from '../components/VariableTable'
 
 const Home = () => {
-   const {
-      language,
-      code,
-      error,
-      explanation,
-      steps,
-      setLanguage,
-      setCode,
-   } = useWalkthrough()
+  const { trace, output } = useWalkthrough()
 
-   return (
-      <div className='min-h-screen bg-zinc-900 text-white flex-col items-center justify-center'>
-         <ErrorMessage error={error} />
-         <Header />
-         <LanguageSelector language={language} setLanguage={setLanguage} />
-         <CodeEditor
-            code={code}
-            setCode={setCode}
-            language={language}
-         />
-         <GenerateButton />
-
-         {explanation && (
-            <ExplanationBox explanation={explanation} />
-         )}
-         {steps.length > 0 && (
-            <ExecutionSteps steps={steps} />
-         )}
+  return (
+    <Layout>
+      <div className='min-h-screen bg-[#0e0e0e] text-[#e8e8e8]'>
+        <div className='max-w-4xl mx-auto px-6 py-10'>
+          <ErrorMessage />
+          <Header />
+          <div className='mt-8 space-y-4'>
+            <LanguageSelector />
+            <CodeEditor />
+            <GenerateButton />
+          </div>
+          <ExplanationBox />
+          <TraceViewer trace={trace} output={output} />
+        </div>
       </div>
-   )
+    </Layout>
+  )
 }
 
 export default Home

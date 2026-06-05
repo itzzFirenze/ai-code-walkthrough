@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose"
-import User from "./User.js"
 
 const walkthroughSchema = new Schema(
    {
@@ -8,21 +7,30 @@ const walkthroughSchema = new Schema(
          ref: "User",
          required: true
       },
+
       language: {
          type: String,
          required: true
       },
+
       code: {
          type: String,
          required: true
       },
+
       explanation: {
          type: String,
          required: true
       },
-      steps: {
+
+      trace: {
          type: Array,
          default: []
+      },
+
+      output: {
+         type: String,
+         default: ""
       }
    },
    {
@@ -30,6 +38,9 @@ const walkthroughSchema = new Schema(
    }
 )
 
-const Walkthrough = mongoose.model("Walkthrough", walkthroughSchema)
+const Walkthrough = mongoose.model(
+   "Walkthrough",
+   walkthroughSchema
+)
 
 export default Walkthrough

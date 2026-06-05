@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 import History from './pages/History'
+import PublicRoute from './components/PublicRoute'
 
 const App = () => {
    return (
@@ -11,11 +12,19 @@ const App = () => {
          <Routes>
             <Route
                path='/login'
-               element={<Login />}
+               element={
+                  <PublicRoute>
+                     <Login />
+                  </PublicRoute>
+               }
             />
             <Route
                path='/register'
-               element={<Register />}
+               element={
+                  <PublicRoute>
+                     <Register />
+                  </PublicRoute>
+               }
             />
             <Route
                path='/'
